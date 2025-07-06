@@ -28,5 +28,15 @@ jobs:
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
+          echo "Matando procesos previos"
           pkill -f app.py || true
-          nohup python3 /home/ec2-user/app/app/app.py > flask.log 2>&1 &
+      
+          echo "Iniciando Flask en segundo plano"
+          nohup python3 /home/ec2-user/app/app/app.py > /home/ec2-user/flask.log 2>&1 &
+      
+          sleep 3
+      
+          echo "Verificando si el proceso Flask está activo"
+          pgrep -f app.py || (echo "❌ Flask no se está ejecutando" && exit 1)
+      
+          echo "✅ Flask se inició correctamente"
