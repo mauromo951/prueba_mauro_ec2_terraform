@@ -41,8 +41,8 @@ jobs:
           pkill -f app.py || true
       
           echo "Iniciando Flask en segundo plano"
-          chmod +x /home/ec2-user/app/app/get_ip.sh
-          nohup python3 /home/ec2-user/app/app/app.py > /home/ec2-user/flask.log 2>&1 &
+          chmod +x /home/ec2-user/app/app/app/get_ip.sh
+          nohup python3 /home/ec2-user/app/app/app/app.py > /home/ec2-user/flask.log 2>&1 &
       
           sleep 3
       
