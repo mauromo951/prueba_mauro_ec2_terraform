@@ -12,13 +12,23 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Copiar archivos a la EC2
-      run: |
-        scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} app.py get_ip.sh ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/app/app/
+    - name: Copy Flask App to EC2
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        source: "app/app.py"
+        target: "/home/ec2-user/app/"
 
-    - name: Dar permisos de ejecución al script
-      run: |
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ec2-user@${{ secrets.EC2_HOST }} 'chmod +x /home/ec2-user/app/app/get_ip.sh'
+    - name: Copy bash script to EC2
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        source: "app/get_ip.sh"
+        target: "/home/ec2-user/app/"
 
     - name: SSH and Run Flask
       uses: appleboy/ssh-action@v1.0.0
