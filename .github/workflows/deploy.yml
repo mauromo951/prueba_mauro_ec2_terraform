@@ -19,7 +19,7 @@ jobs:
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         source: "app/app.py"
-        target: "/home/ec2-user/app/"
+        target: "/home/ec2-user/app/app/"
 
     - name: Copy bash script to EC2
       uses: appleboy/scp-action@v0.1.7
@@ -28,7 +28,7 @@ jobs:
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         source: "app/get_ip.sh"
-        target: "/home/ec2-user/app/"
+        target: "/home/ec2-user/app/app/"
 
     - name: SSH and Run Flask
       uses: appleboy/ssh-action@v1.0.0
@@ -41,6 +41,7 @@ jobs:
           pkill -f app.py || true
       
           echo "Iniciando Flask en segundo plano"
+          chmod +x /home/ec2-user/app/app/get_ip.sh
           nohup python3 /home/ec2-user/app/app/app.py > /home/ec2-user/flask.log 2>&1 &
       
           sleep 3
